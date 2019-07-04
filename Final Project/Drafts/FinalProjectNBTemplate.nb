@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      2854,         80]
-NotebookOptionsPosition[      1875,         51]
-NotebookOutlinePosition[      2688,         78]
-CellTagsIndexPosition[      2645,         75]
+NotebookDataLength[      3313,         92]
+NotebookOptionsPosition[      2242,         62]
+NotebookOutlinePosition[      3055,         89]
+CellTagsIndexPosition[      3012,         86]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -35,18 +35,29 @@ Cell["< Shivain Vij>", "Text",
 fa93ec9acae9"],
 
 Cell["\<\
-< Mentor\[CloseCurlyQuote]s First and Last name>
+< Philip and Last name>
 Finding the maximum return rate for a unit of a cryptocurrency
 Variance
-Cryptocurrency portfolio tracker\
+Cryptocurrency portfolio tracker
+Look at cryptocurrency prices since they go up and down a lot
+
+
+Predict how much money a cryptocoin can make and how long it will last
+\
 \>", "Text",
  CellChangeTimes->{{3.549624515773694*^9, 3.5496245246892014`*^9}, {
   3.5498187208956137`*^9, 3.5498187221413403`*^9}, {3.5498190558319674`*^9, 
   3.54981906151682*^9}, {3.770055624686027*^9, 3.770055659820487*^9}, {
   3.771190862765567*^9, 3.771190876232794*^9}, {3.7711910684644346`*^9, 
-  3.7711910698068275`*^9}, {3.7711914933567524`*^9, 
-  3.7711914992441597`*^9}},ExpressionUUID->"b70c649b-a958-4202-9f22-\
-238ea1f9c7d4"]
+  3.7711910698068275`*^9}, {3.7711914933567524`*^9, 3.7711914992441597`*^9}, {
+  3.7711937156291933`*^9, 3.7711937158260736`*^9}, {3.771194122118637*^9, 
+  3.7711941770580482`*^9}},ExpressionUUID->"b70c649b-a958-4202-9f22-\
+238ea1f9c7d4"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.771194118532922*^9, 
+  3.771194120030794*^9}},ExpressionUUID->"07151f49-0587-4629-91ce-\
+bb44cd9a0d6b"]
 }, Open  ]]
 },
 WindowSize->{720, 855},
@@ -80,7 +91,8 @@ Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 263, 4, 96, "Title",ExpressionUUID->"49ab34ee-bfd5-49f5-beef-400d3cc456dd"],
 Cell[846, 28, 404, 6, 34, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
-Cell[1253, 36, 606, 12, 100, "Text",ExpressionUUID->"b70c649b-a958-4202-9f22-238ea1f9c7d4"]
+Cell[1253, 36, 818, 18, 210, "Text",ExpressionUUID->"b70c649b-a958-4202-9f22-238ea1f9c7d4"],
+Cell[2074, 56, 152, 3, 28, "Input",ExpressionUUID->"07151f49-0587-4629-91ce-bb44cd9a0d6b"]
 }, Open  ]]
 }
 ]
