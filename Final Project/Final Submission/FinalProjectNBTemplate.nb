@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      3981,         97]
-NotebookOptionsPosition[      3001,         68]
-NotebookOutlinePosition[      3813,         95]
-CellTagsIndexPosition[      3770,         92]
+NotebookDataLength[     52242,       1186]
+NotebookOptionsPosition[     47282,       1096]
+NotebookOutlinePosition[     48094,       1123]
+CellTagsIndexPosition[     48051,       1120]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -55,15 +55,1043 @@ the optimized portfolio would show the optimum weights of the \
 cryptocurrencies. Following that, historical bitcoin blockchain data was \
 collected for optimized portfolios to be inputted into a neural network \
 machine learning algorithm to attempt to predict future bitcoin return rates. \
-The return rates would then be used to compute an optimal portfolio.
-\
+The return rates would then be used to compute an optimal portfolio.\
 \>", "Text",
  CellChangeTimes->{{3.549624515773694*^9, 3.5496245246892014`*^9}, {
    3.5498187208956137`*^9, 3.5498187221413403`*^9}, {3.5498190558319674`*^9, 
    3.54981906151682*^9}, {3.770055624686027*^9, 3.770055659820487*^9}, {
-   3.771858409902151*^9, 3.7718584189312854`*^9}, 
-   3.7718584994846764`*^9},ExpressionUUID->"b70c649b-a958-4202-9f22-\
-238ea1f9c7d4"]
+   3.771858409902151*^9, 3.7718584189312854`*^9}, 3.7718584994846764`*^9, 
+   3.7718593583020444`*^9},ExpressionUUID->"b70c649b-a958-4202-9f22-\
+238ea1f9c7d4"],
+
+Cell[CellGroupData[{
+
+Cell["1. Portfolio Optimization for Current Date", "Section",
+ CellChangeTimes->{{3.771859386618884*^9, 
+  3.7718594244473066`*^9}},ExpressionUUID->"63179ade-f1b9-4f2a-a701-\
+e963d59056fd"],
+
+Cell[CellGroupData[{
+
+Cell["1.1 Collect Raw Financial Data for Bitcoin and Ethereum", "Subsection",
+ CellChangeTimes->{{3.771859386618884*^9, 3.7718594700419164`*^9}, 
+   3.771859522874446*^9},ExpressionUUID->"231c4433-858b-484a-9b3f-\
+5b17e4875a5e"],
+
+Cell[TextData[{
+ StyleBox["portfolio",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - A list of cryptocurrencies to be included in the portfolio. BTC is \
+Bitcoin and ETH is Ethereum."
+}], "CodeText",
+ CellChangeTimes->{{3.771859386618884*^9, 3.7718594700419164`*^9}, {
+  3.771859546928404*^9, 
+  3.7718595610281343`*^9}},ExpressionUUID->"a75a937e-93c0-4a7b-833f-\
+72193523a523"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"portfolio", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"\"\<BTC\>\"", ",", " ", "\"\<ETH\>\""}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7718595675634923`*^9, 3.7718596042002497`*^9}},
+ CellLabel->
+  "In[1510]:=",ExpressionUUID->"ba8bff41-54e6-4001-bc74-406598696759"],
+
+Cell[TextData[{
+ StyleBox["data",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - A 2 part variable that contains both the historical values of Bitcoin \
+and Ethereum, with Bitcoin being the first, and Ethereum being second. The \
+range is set to be from 2010 to 2020 to ensure that no data is being excluded."
+}], "CodeText",
+ CellChangeTimes->{{3.7718595675634923`*^9, 
+  3.7718596173846517`*^9}},ExpressionUUID->"fc3757ca-e171-4a14-bbd0-\
+2b3f180255a6"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"data", " ", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"FinancialData", "[", 
+      RowBox[{"#", ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "2010", "}"}], ",", 
+         RowBox[{"{", "2020", "}"}]}], "}"}]}], "]"}], "&"}], "/@", 
+    "portfolio"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7718596219705257`*^9, 3.7718596271413884`*^9}, {
+  3.7718597145294476`*^9, 3.771859726135845*^9}},
+ CellLabel->
+  "In[1511]:=",ExpressionUUID->"85321c48-7df5-4ad5-a475-45e4e7bf5893"],
+
+Cell[TextData[{
+ "Re-Initializing ",
+ StyleBox["data",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " to only contain dates that are common between the historical values of \
+Bitcoin and Ethereum. This is done using the function ",
+ StyleBox["TimeSeriesResample",
+  FontVariations->{"Underline"->True}],
+ " with the parameter ",
+ StyleBox["Intersection",
+  FontSlant->"Italic",
+  FontVariations->{"Underline"->True}],
+ "."
+}], "CodeText",
+ CellChangeTimes->{{3.7718596219705257`*^9, 3.7718596271413884`*^9}, {
+  3.7718597145294476`*^9, 
+  3.7718597412260485`*^9}},ExpressionUUID->"e3395b83-394e-4860-a4c3-\
+1e811ecc94cf"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"data", " ", "=", " ", 
+   RowBox[{"TimeSeriesResample", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"data", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+       RowBox[{"data", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
+     "\"\<Intersection\>\""}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{3.771859763382384*^9},
+ CellLabel->
+  "In[1512]:=",ExpressionUUID->"faaddd97-e729-4d48-869b-f7140bb41094"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["1.2 Process Raw Data for Optimization Function", "Subsection",
+ CellChangeTimes->{{3.771859763382384*^9, 3.771859792776326*^9}, 
+   3.7718599350570593`*^9},ExpressionUUID->"dcde26e1-6e48-48b6-b81c-\
+a08ec2c81ed3"],
+
+Cell["\<\
+The optimization function will require the historical return rates of both \
+Bitcoin and Ethereum, the Standard Deviation of both Bitcoin and Ethereum, \
+and the correlation between the 2 cryptocurrencies.\
+\>", "Text",
+ CellChangeTimes->{{3.771859763382384*^9, 3.771859792776326*^9}, {
+  3.771859945007962*^9, 
+  3.771860045789144*^9}},ExpressionUUID->"1856deea-9c2b-426b-97d6-\
+265320922348"],
+
+Cell[TextData[{
+ StyleBox["returns",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - Another 2 part variable that contains the Logarithmic returns of the \
+historical financial data collected in 1.1. This data will be smaller by 1 \
+element because the equation for finding Logarithmic returns requires 2 dates \
+ in order to compute a difference in the values."
+}], "CodeText",
+ CellChangeTimes->{{3.771859763382384*^9, 
+  3.7718598127351875`*^9}},ExpressionUUID->"d85ebefb-032a-487d-96e2-\
+c4680ab946d2"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"returns", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Differences", "@*", "Log"}], "/@", 
+    RowBox[{"data", "[", 
+     RowBox[{"[", 
+      RowBox[{"All", ",", " ", "All", ",", " ", "2"}], "]"}], "]"}]}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{3.7718598236702843`*^9},
+ CellLabel->
+  "In[1513]:=",ExpressionUUID->"27d1f586-586d-4da4-a0d8-7fd8dc79fbc9"],
+
+Cell[TextData[{
+ StyleBox["btcSD",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " and ",
+ StyleBox["ethSD",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - 2 variables that contain the Standard Deviation of Bitcoin and Ethereum \
+respectively by using the ",
+ StyleBox["StandardDeviation",
+  FontVariations->{"Underline"->True}],
+ " function and the ",
+ StyleBox["returns",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " that we calculated in the last step."
+}], "CodeText",
+ CellChangeTimes->{{3.7718598236702843`*^9, 
+  3.7718598380117025`*^9}},ExpressionUUID->"dd9974b5-a995-4079-91cd-\
+641bb23fed92"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"btcSD", " ", "=", " ", 
+   RowBox[{"StandardDeviation", "[", 
+    RowBox[{"returns", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "]"}]}], " ", 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ethSD", " ", "=", " ", 
+   RowBox[{"StandardDeviation", "[", 
+    RowBox[{"returns", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{3.7718598625530596`*^9},
+ CellLabel->
+  "In[1514]:=",ExpressionUUID->"d8e904dc-531b-461e-9bdc-763a9cde6750"],
+
+Cell[TextData[{
+ StyleBox["correlated",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - A variable that uses the ",
+ StyleBox["Correlation",
+  FontVariations->{"Underline"->True}],
+ " function with the returns of Bitcoin and Ethereum. The correlation refers \
+to how similar the cryptocurrencies fluctuate, which is evident in the first \
+graphic of the notebook."
+}], "CodeText",
+ CellChangeTimes->{{3.7718598625530596`*^9, 
+  3.7718598705620747`*^9}},ExpressionUUID->"dec0f19f-cf46-4014-b846-\
+3c4fc771474e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"correlated", " ", "=", 
+   RowBox[{"Correlation", "[", 
+    RowBox[{
+     RowBox[{"returns", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+     RowBox[{"returns", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{3.7718600607131147`*^9},
+ CellLabel->
+  "In[1516]:=",ExpressionUUID->"63b4f4df-80ab-4876-be97-39246ad69bc3"],
+
+Cell[CellGroupData[{
+
+Cell["What is correlation?", "Subsubsubsubsection",
+ CellChangeTimes->{{3.7718600607131147`*^9, 
+  3.7718601357948136`*^9}},ExpressionUUID->"1dd6ff0d-5b84-4d4e-88f6-\
+a43d858b205e"],
+
+Cell["\<\
+Correlation refers to how likely 2 or more cryptocurrencies or stocks are to \
+move in similar patterns. It is very likely that something that has an effect \
+on Bitcoin will also have an effect on Ethereum, since they are both \
+cryptocurrencies.\
+\>", "Text",
+ CellChangeTimes->{{3.7718600607131147`*^9, 3.771860120219883*^9}, {
+  3.7718601537573624`*^9, 
+  3.7718602295730996`*^9}},ExpressionUUID->"f5528fdb-89d7-4dea-a1be-\
+c9b4b92364d2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"btc", " ", "=", " ", 
+   RowBox[{"FinancialData", "[", 
+    RowBox[{"\"\<BTC/USD\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"2016", ",", " ", "07", ",", " ", "18"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"eth", " ", "=", " ", 
+   RowBox[{"FinancialData", "[", 
+    RowBox[{"\"\<ETH/USD\>\"", ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"2008", ",", " ", "1", ",", " ", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ImageDifference", "[", 
+  RowBox[{
+   RowBox[{"DateListPlot", "[", "eth", "]"}], ",", " ", 
+   RowBox[{"DateListPlot", "[", "btc", "]"}]}], "]"}]}], "Input",
+ CellChangeTimes->{3.7718602536507473`*^9},
+ CellLabel->
+  "In[1517]:=",ExpressionUUID->"5325c44a-7de4-4a6f-9cbf-9eb84bba4f66"],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[RasterBox[CompressedData["
+1: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
+N9BgMBgMBoPBYDAYDAaDwWAwGCqI/wfXLVlu
+    "], {{0, 226}, {360, 0}}, {0, 255},
+    ColorFunction->RGBColor],
+   BoxForm`ImageTag["Byte", ColorSpace -> "RGB", Interleaving -> True],
+   Selectable->False],
+  DefaultBaseStyle->"ImageGraphics",
+  ImageSizeRaw->{360, 226},
+  PlotRange->{{0, 360}, {0, 226}}]], "Output",
+ CellChangeTimes->{3.771861416288474*^9},
+ CellLabel->
+  "Out[1519]=",ExpressionUUID->"6086774d-e9f5-41aa-b226-8ccda3c8686a"]
+}, Open  ]],
+
+Cell["\<\
+Looking at the above graph, we can see that Bitcoin and Ethereum\
+\[CloseCurlyQuote]s prices fluctuate in very similar patterns. The \
+cryptocurrencies are not the same, however, since the scales of both graphs \
+are not the same since they only represent cryptocurrency value fluctuation.\
+\>", "CodeText",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.771860267883686*^9, {3.7718604904724216`*^9, 3.7718605193776183`*^9}, {
+   3.7718605547149363`*^9, 3.771860622918925*^9}, {3.771860653999028*^9, 
+   3.7718606705561256`*^9}},ExpressionUUID->"99ff266f-7ec0-4f13-8de1-\
+80edf7813fbd"],
+
+Cell[TextData[{
+ "Create a function called ",
+ StyleBox["optimize",
+  FontVariations->{"Underline"->True}],
+ " with the parameters: Bitcoin return rate, Ethereum return rate, Bitcoin \
+Standard Deviation, Ethereum Standard Deviation, and Correlation between the \
+2 cryptocurrencies. The function optimize will use ",
+ StyleBox["NMaximize",
+  FontVariations->{"Underline"->True}],
+ ", which is a Wolfram function, to calculate a weight for Bitcoin that will \
+maximize the Sharpe Ratio, which refers to safe an investment is estimated to \
+be. The allocation of funds to Bitcoin is represented by the variable ",
+ StyleBox["weight",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ ", and the allocation of funds for Ethereum is represented by ",
+ StyleBox["(1 - weight)",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ "."
+}], "CodeText",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.771860267883686*^9, {3.7718604904724216`*^9, 3.7718605193776183`*^9}, {
+   3.7718605547149363`*^9, 3.771860622918925*^9}, 3.771860653999028*^9, {
+   3.771861088302873*^9, 
+   3.771861104158334*^9}},ExpressionUUID->"571e6a78-fe0a-4abe-b233-\
+92ba4f8d02cf"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"optimize", "[", 
+   RowBox[{
+   "btcreturn_", ",", " ", "ethreturn_", ",", " ", "btcsd_", ",", " ", 
+    "ethsd_", ",", " ", "correlation_"}], "]"}], " ", ":=", " ", 
+  RowBox[{"NMaximize", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Sqrt", "[", "252", "]"}], 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"weight", "*", "btcreturn"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "-", "weight"}], ")"}], "*", "ethreturn"}]}], ")"}], 
+        "/", 
+        RowBox[{"Sqrt", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"btcsd", "^", "2"}], "*", 
+           RowBox[{"weight", "^", "2"}]}], " ", "+", " ", 
+          RowBox[{
+           RowBox[{"ethsd", "^", "2"}], "*", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", "-", "weight"}], ")"}], "^", "2"}]}], " ", "+", " ", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "*", "correlation", "*", "btcsd", "*", "ethsd"}], 
+            ")"}], "*", "weight", "*", 
+           RowBox[{"(", 
+            RowBox[{"1", "-", "weight"}], ")"}]}]}], "]"}]}]}], ",", " ", 
+      RowBox[{
+      "1", "\[GreaterEqual]", " ", "weight", " ", "\[GreaterEqual]", " ", 
+       "0"}]}], "}"}], ",", " ", "weight"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.771861147593241*^9, 3.771861186703705*^9}},
+ CellLabel->
+  "In[1520]:=",ExpressionUUID->"ec57d083-0575-4dfc-ae78-caaf50f8144c"],
+
+Cell[TextData[{
+ "The cell below will input the previously collected data into the ",
+ StyleBox["optimize",
+  FontVariations->{"Underline"->True}],
+ " function we just created to calculate the Current optimized portfolio."
+}], "CodeText",
+ CellChangeTimes->{{3.771861147593241*^9, 
+  3.7718611981385126`*^9}},ExpressionUUID->"7e0d4ec4-16fa-44e9-896c-\
+e47e2fc304be"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"optimize", "[", 
+  RowBox[{
+   RowBox[{"Mean", "[", 
+    RowBox[{"returns", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", " ", 
+   RowBox[{"Mean", "[", 
+    RowBox[{"returns", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], "]"}], ",", " ", "btcSD", ",", " ", 
+   "ethSD", ",", " ", "correlated"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7718612018095384`*^9, 3.7718612306441517`*^9}},
+ CellLabel->
+  "In[1521]:=",ExpressionUUID->"5ab9846d-fdce-46c4-8fc0-2b49171a08a1"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1.1952781573028435`", ",", 
+   RowBox[{"{", 
+    RowBox[{"weight", "\[Rule]", "0.6397610746737318`"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.7718614279888196`*^9},
+ CellLabel->
+  "Out[1521]=",ExpressionUUID->"24382f49-2517-44d4-89b0-caf13754bbf3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["1.3 Wrap Everything in a Manipulate", "Subsection",
+ CellChangeTimes->{{3.7718612018095384`*^9, 3.7718612306441517`*^9}, {
+  3.771861275512314*^9, 
+  3.771861296573757*^9}},ExpressionUUID->"74ff4c0e-edaa-4dcc-9126-\
+dfe8cc25f4c5"],
+
+Cell[TextData[{
+ "The ",
+ StyleBox["Manipulate",
+  FontVariations->{"Underline"->True}],
+ " below allows a user to change all the variables of the data we previously \
+collected and see what the optimized portfolio is given the user\
+\[CloseCurlyQuote]s input in a live environment."
+}], "CodeText",
+ CellChangeTimes->{{3.7718612018095384`*^9, 3.7718612306441517`*^9}, {
+  3.771861275512314*^9, 
+  3.77186134169448*^9}},ExpressionUUID->"a737e2c7-ff39-4305-8678-\
+2bed86e79077"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"Sqrt", "[", "252.", "]"}], 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"weight", "*", "btcreturn"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "-", "weight"}], ")"}], "*", "ethreturn"}]}], ")"}], 
+      "/", 
+      RowBox[{"Sqrt", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"btcsd", "^", "2"}], "*", 
+         RowBox[{"weight", "^", "2"}]}], " ", "+", " ", 
+        RowBox[{
+         RowBox[{"ethsd", "^", "2"}], "*", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", "weight"}], ")"}], "^", "2"}]}], " ", "+", " ", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"2", "*", "correlation", "*", "btcsd", "*", "ethsd"}], 
+          ")"}], "*", "weight", "*", 
+         RowBox[{"(", 
+          RowBox[{"1", "-", "weight"}], ")"}]}]}], "]"}]}]}], " ", "\[Rule]", 
+    " ", 
+    RowBox[{"(", 
+     RowBox[{"optimize", "[", 
+      RowBox[{
+      "btcreturn", ",", " ", "ethreturn", ",", " ", "btcsd", ",", " ", 
+       "ethsd", ",", " ", "correlation"}], "]"}], ")"}]}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"weight", ",", " ", "0", ",", " ", "1"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"btcreturn", ",", " ", 
+       RowBox[{"Mean", "[", 
+        RowBox[{"returns", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}], ",", " ", "0", ",", 
+     " ", "1"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ethreturn", ",", " ", 
+       RowBox[{"Mean", "[", 
+        RowBox[{"returns", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], ",", " ", "0", ",", 
+     " ", "1"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"btcsd", ",", " ", "btcSD"}], "}"}], ",", " ", "0", ",", " ", 
+     "1"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ethsd", ",", " ", "ethSD"}], "}"}], ",", " ", "0", ",", " ", 
+     "1"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"correlation", ",", " ", "correlated"}], "}"}], ",", " ", "0", 
+     ",", " ", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.77186134695887*^9, 3.7718613868994045`*^9}},
+ CellLabel->
+  "In[1522]:=",ExpressionUUID->"7f7d1ec5-8af1-4dd5-9296-0000faf80d1c"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`btcreturn$$ = 
+    0.0028374180587295173`, $CellContext`btcsd$$ = 
+    0.04565215104289907, $CellContext`correlation$$ = 
+    0.14260224966612672`, $CellContext`ethreturn$$ = 
+    0.0031646080346303487`, $CellContext`ethsd$$ = 
+    0.062135614395628515`, $CellContext`weight$$ = 0, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`weight$$], 0, 1}, {{
+       Hold[$CellContext`btcreturn$$], 0.0028374180587295173`}, 0, 1}, {{
+       Hold[$CellContext`ethreturn$$], 0.0031646080346303487`}, 0, 1}, {{
+       Hold[$CellContext`btcsd$$], 0.04565215104289907}, 0, 1}, {{
+       Hold[$CellContext`ethsd$$], 0.062135614395628515`}, 0, 1}, {{
+       Hold[$CellContext`correlation$$], 0.14260224966612672`}, 0, 1}}, 
+    Typeset`size$$ = {280., {3., 9.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`weight$7690408$$ = 
+    0, $CellContext`btcreturn$7690409$$ = 
+    0, $CellContext`ethreturn$7690410$$ = 0, $CellContext`btcsd$7690411$$ = 
+    0, $CellContext`ethsd$7690412$$ = 0, $CellContext`correlation$7690413$$ = 
+    0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`btcreturn$$ = 
+        0.0028374180587295173`, $CellContext`btcsd$$ = 
+        0.04565215104289907, $CellContext`correlation$$ = 
+        0.14260224966612672`, $CellContext`ethreturn$$ = 
+        0.0031646080346303487`, $CellContext`ethsd$$ = 
+        0.062135614395628515`, $CellContext`weight$$ = 0}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`weight$$, $CellContext`weight$7690408$$, 0], 
+        Hold[$CellContext`btcreturn$$, $CellContext`btcreturn$7690409$$, 0], 
+        Hold[$CellContext`ethreturn$$, $CellContext`ethreturn$7690410$$, 0], 
+        Hold[$CellContext`btcsd$$, $CellContext`btcsd$7690411$$, 0], 
+        Hold[$CellContext`ethsd$$, $CellContext`ethsd$7690412$$, 0], 
+        Hold[$CellContext`correlation$$, $CellContext`correlation$7690413$$, 
+         0]}, "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, 
+      "Body" :> (
+       Sqrt[252.] (($CellContext`weight$$ $CellContext`btcreturn$$ + (
+            1 - $CellContext`weight$$) $CellContext`ethreturn$$)/
+         Sqrt[$CellContext`btcsd$$^2 $CellContext`weight$$^2 + \
+$CellContext`ethsd$$^2 (1 - $CellContext`weight$$)^2 + (
+            2 $CellContext`correlation$$ $CellContext`btcsd$$ \
+$CellContext`ethsd$$) $CellContext`weight$$ (
+            1 - $CellContext`weight$$)]) -> \
+$CellContext`optimize[$CellContext`btcreturn$$, $CellContext`ethreturn$$, \
+$CellContext`btcsd$$, $CellContext`ethsd$$, $CellContext`correlation$$]), 
+      "Specifications" :> {{$CellContext`weight$$, 0, 
+         1}, {{$CellContext`btcreturn$$, 0.0028374180587295173`}, 0, 
+         1}, {{$CellContext`ethreturn$$, 0.0031646080346303487`}, 0, 
+         1}, {{$CellContext`btcsd$$, 0.04565215104289907}, 0, 
+         1}, {{$CellContext`ethsd$$, 0.062135614395628515`}, 0, 
+         1}, {{$CellContext`correlation$$, 0.14260224966612672`}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{331., {122., 128.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.771861393475992*^9, 3.771861430363292*^9},
+ CellLabel->
+  "Out[1522]=",ExpressionUUID->"6685b54f-aa2e-4bfd-a77a-f19bcfd5fdb5"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2. Historical Optimization for Date Ranges", "Section",
+ CellChangeTimes->{{3.771861455620427*^9, 3.7718615018103476`*^9}, 
+   3.771861543707958*^9, {3.771861788656046*^9, 
+   3.7718617945665293`*^9}},ExpressionUUID->"72f55c20-1571-49fc-8dba-\
+f9fe2f742d7a"],
+
+Cell[CellGroupData[{
+
+Cell["2.1 Edit Manipulate from Section 1.3", "Subsubsection",
+ CellChangeTimes->{{3.771861455620427*^9, 3.7718615018103476`*^9}, {
+   3.771861566233858*^9, 3.771861585744321*^9}, 
+   3.771861701469434*^9},ExpressionUUID->"6ee4d722-820c-4054-b25c-\
+30e095de8753"],
+
+Cell["\<\
+The next step is to calculate the optimized portfolio over a given date range \
+in order to be able to calculate the historical optimized portfolio. This is \
+done by removing the user\[CloseCurlyQuote]s option to edit variables such as \
+return rates, and replacing them with the ability to edit a specific date \
+range.\
+\>", "CodeText",
+ CellChangeTimes->{{3.771861455620427*^9, 3.7718615018103476`*^9}, {
+  3.771861566233858*^9, 3.771861585744321*^9}, {3.771861729361537*^9, 
+  3.7718617378629885`*^9}},ExpressionUUID->"ad52fad4-c533-43a8-9ebe-\
+be373d34f9fb"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"date", " ", "=", " ", 
+     RowBox[{"DatePlus", "[", 
+      RowBox[{"Today", ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"EndDate", ",", " ", "\"\<Days\>\""}], "}"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"data", " ", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"FinancialData", "[", 
+        RowBox[{"#", ",", " ", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"date", "-", 
+            RowBox[{"Quantity", "[", 
+             RowBox[{"DaysBeforeEndDate", ",", " ", "\"\<Days\>\""}], "]"}]}],
+            ",", "date"}], "}"}]}], "]"}], "&"}], "/@", "portfolio"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"dataSelected", " ", "=", " ", 
+     RowBox[{"TimeSeriesResample", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"data", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
+       "\"\<Intersection\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"returns", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Differences", "@*", "Log"}], "/@", 
+      RowBox[{"dataSelected", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", " ", "All", ",", " ", "2"}], "]"}], "]"}]}]}], 
+    ";", "\[IndentingNewLine]", 
+    RowBox[{"btcSD", " ", "=", " ", 
+     RowBox[{"StandardDeviation", "[", 
+      RowBox[{"returns", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "]"}]}], " ", ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"ethSD", " ", "=", " ", 
+     RowBox[{"StandardDeviation", "[", 
+      RowBox[{"returns", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"correlated", " ", "=", 
+     RowBox[{"Correlation", "[", 
+      RowBox[{
+       RowBox[{"returns", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+       RowBox[{"returns", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Column", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"date", ",", 
+        RowBox[{"optimize", "[", 
+         RowBox[{
+          RowBox[{"Mean", "[", 
+           RowBox[{"returns", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", " ", 
+          RowBox[{"Mean", "[", 
+           RowBox[{"returns", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], "]"}], ",", " ", "btcSD", ",", 
+          " ", "ethSD", ",", " ", "correlated"}], "]"}]}], "}"}], ",", " ", 
+      "Center"}], "]"}]}], "\[IndentingNewLine]", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"DaysBeforeEndDate", ",", " ", "126"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+      "5", ",", " ", "21", ",", " ", "63", ",", " ", "126", ",", " ", "252"}],
+       "}"}], ",", " ", 
+     RowBox[{"ControlType", "\[Rule]", " ", "SetterBar"}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"EndDate", ",", " ", 
+     RowBox[{"-", "993"}], ",", " ", "0", ",", " ", "1"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.771861850936467*^9, 3.7718618515544252`*^9}},
+ CellLabel->
+  "In[1524]:=",ExpressionUUID->"8cb45f49-03f2-4c04-932e-6dd76876a804"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`DaysBeforeEndDate$$ = 
+    126, $CellContext`EndDate$$ = -993, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`DaysBeforeEndDate$$], 126}, {5, 21, 63, 126, 252}}, {
+      Hold[$CellContext`EndDate$$], -993, 0, 1}}, Typeset`size$$ = {
+    158., {17.5, 23.5}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`DaysBeforeEndDate$7695639$$ = 
+    0, $CellContext`EndDate$7695640$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`DaysBeforeEndDate$$ = 
+        126, $CellContext`EndDate$$ = -993}, "ControllerVariables" :> {
+        Hold[$CellContext`DaysBeforeEndDate$$, \
+$CellContext`DaysBeforeEndDate$7695639$$, 0], 
+        Hold[$CellContext`EndDate$$, $CellContext`EndDate$7695640$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, 
+      "Body" :> ($CellContext`date = 
+        DatePlus[Today, {$CellContext`EndDate$$, "Days"}]; $CellContext`data = 
+        Map[FinancialData[#, {$CellContext`date - 
+            Quantity[$CellContext`DaysBeforeEndDate$$, 
+             "Days"], $CellContext`date}]& , $CellContext`portfolio]; \
+$CellContext`dataSelected = TimeSeriesResample[{
+           Part[$CellContext`data, 1], 
+           Part[$CellContext`data, 2]}, "Intersection"]; $CellContext`returns = 
+        Map[
+          Composition[Differences, Log], 
+          Part[$CellContext`dataSelected, All, All, 2]]; $CellContext`btcSD = 
+        StandardDeviation[
+          Part[$CellContext`returns, 1]]; $CellContext`ethSD = 
+        StandardDeviation[
+          Part[$CellContext`returns, 2]]; $CellContext`correlated = 
+        Correlation[
+          Part[$CellContext`returns, 1], 
+          Part[$CellContext`returns, 2]]; Column[{$CellContext`date, 
+          $CellContext`optimize[
+           Mean[
+            Part[$CellContext`returns, 1]], 
+           Mean[
+            
+            Part[$CellContext`returns, 
+             2]], $CellContext`btcSD, $CellContext`ethSD, \
+$CellContext`correlated]}, Center]), 
+      "Specifications" :> {{{$CellContext`DaysBeforeEndDate$$, 126}, {5, 21, 
+         63, 126, 252}, ControlType -> 
+         SetterBar}, {$CellContext`EndDate$$, -993, 0, 1}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{353., {77., 83.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.771861819672196*^9, {3.771861853536828*^9, 
+   3.7718618731217585`*^9}},ExpressionUUID->"7a8e676d-639c-4a71-acac-\
+c0cc74a7fc9c"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2.2 Collecting All Historical Optimized Data", "Subsection",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.771861819672196*^9, {3.771861853536828*^9, 
+   3.7718619437722855`*^9}},ExpressionUUID->"b2513485-4e1a-4e1c-bc9a-\
+3e4cc8ebd97f"],
+
+Cell[TextData[{
+ StyleBox["historicalOptimized",
+  FontWeight->"Bold",
+  FontVariations->{"Underline"->True}],
+ " - A variable that contains historically optimized data that dates back to \
+600 data points from today. The variable does not contain all of the \
+historical data because if we were to include all the data, we would have \
+data that is not realistic in comparison "
+}], "CodeText",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.771861819672196*^9, {3.771861853536828*^9, 3.7718619226899834`*^9}, {
+   3.7718619726464863`*^9, 3.771862004452606*^9}, {3.771862335956462*^9, 
+   3.7718623641812515`*^9}},ExpressionUUID->"82766571-ffda-4be9-9be1-\
+332ecfd2d179"]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 },
 WindowSize->{638, 628},
@@ -97,7 +1125,68 @@ Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 306, 6, 216, "Title",ExpressionUUID->"49ab34ee-bfd5-49f5-beef-400d3cc456dd"],
 Cell[889, 30, 401, 6, 34, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
-Cell[1293, 38, 1692, 27, 430, "Text",ExpressionUUID->"b70c649b-a958-4202-9f22-238ea1f9c7d4"]
+Cell[1293, 38, 1715, 26, 408, "Text",ExpressionUUID->"b70c649b-a958-4202-9f22-238ea1f9c7d4"],
+Cell[CellGroupData[{
+Cell[3033, 68, 189, 3, 67, "Section",ExpressionUUID->"63179ade-f1b9-4f2a-a701-e963d59056fd"],
+Cell[CellGroupData[{
+Cell[3247, 75, 228, 3, 53, "Subsection",ExpressionUUID->"231c4433-858b-484a-9b3f-5b17e4875a5e"],
+Cell[3478, 80, 399, 10, 57, "CodeText",ExpressionUUID->"a75a937e-93c0-4a7b-833f-72193523a523"],
+Cell[3880, 92, 313, 7, 28, "Input",ExpressionUUID->"ba8bff41-54e6-4001-bc74-406598696759"],
+Cell[4196, 101, 475, 10, 77, "CodeText",ExpressionUUID->"fc3757ca-e171-4a14-bbd0-2b3f180255a6"],
+Cell[4674, 113, 536, 15, 28, "Input",ExpressionUUID->"85321c48-7df5-4ad5-a475-45e4e7bf5893"],
+Cell[5213, 130, 639, 18, 77, "CodeText",ExpressionUUID->"e3395b83-394e-4860-a4c3-1e811ecc94cf"],
+Cell[5855, 150, 490, 14, 28, "Input",ExpressionUUID->"faaddd97-e729-4d48-869b-f7140bb41094"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6382, 169, 219, 3, 53, "Subsection",ExpressionUUID->"dcde26e1-6e48-48b6-b81c-a08ec2c81ed3"],
+Cell[6604, 174, 404, 8, 78, "Text",ExpressionUUID->"1856deea-9c2b-426b-97d6-265320922348"],
+Cell[7011, 184, 525, 11, 97, "CodeText",ExpressionUUID->"d85ebefb-032a-487d-96e2-c4680ab946d2"],
+Cell[7539, 197, 387, 11, 28, "Input",ExpressionUUID->"27d1f586-586d-4da4-a0d8-7fd8dc79fbc9"],
+Cell[7929, 210, 659, 20, 77, "CodeText",ExpressionUUID->"dd9974b5-a995-4079-91cd-641bb23fed92"],
+Cell[8591, 232, 515, 14, 48, "Input",ExpressionUUID->"d8e904dc-531b-461e-9bdc-763a9cde6750"],
+Cell[9109, 248, 529, 13, 77, "CodeText",ExpressionUUID->"dec0f19f-cf46-4014-b846-3c4fc771474e"],
+Cell[9641, 263, 406, 11, 28, "Input",ExpressionUUID->"63b4f4df-80ab-4876-be97-39246ad69bc3"],
+Cell[CellGroupData[{
+Cell[10072, 278, 181, 3, 30, "Subsubsubsubsection",ExpressionUUID->"1dd6ff0d-5b84-4d4e-88f6-a43d858b205e"],
+Cell[10256, 283, 452, 9, 78, "Text",ExpressionUUID->"f5528fdb-89d7-4dea-a1be-c9b4b92364d2"],
+Cell[CellGroupData[{
+Cell[10733, 296, 795, 21, 67, "Input",ExpressionUUID->"5325c44a-7de4-4a6f-9cbf-9eb84bba4f66"],
+Cell[11531, 319, 15023, 251, 243, "Output",ExpressionUUID->"6086774d-e9f5-41aa-b226-8ccda3c8686a"]
+}, Open  ]],
+Cell[26569, 573, 623, 12, 97, "CodeText",ExpressionUUID->"99ff266f-7ec0-4f13-8de1-80edf7813fbd"],
+Cell[27195, 587, 1199, 28, 157, "CodeText",ExpressionUUID->"571e6a78-fe0a-4abe-b233-92ba4f8d02cf"],
+Cell[28397, 617, 1506, 41, 124, "Input",ExpressionUUID->"ec57d083-0575-4dfc-ae78-caaf50f8144c"],
+Cell[29906, 660, 366, 8, 57, "CodeText",ExpressionUUID->"7e0d4ec4-16fa-44e9-896c-e47e2fc304be"],
+Cell[CellGroupData[{
+Cell[30297, 672, 497, 12, 48, "Input",ExpressionUUID->"5ab9846d-fdce-46c4-8fc0-2b49171a08a1"],
+Cell[30797, 686, 300, 8, 32, "Output",ExpressionUUID->"24382f49-2517-44d4-89b0-caf13754bbf3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31158, 701, 236, 4, 53, "Subsection",ExpressionUUID->"74ff4c0e-edaa-4dcc-9126-dfe8cc25f4c5"],
+Cell[31397, 707, 477, 11, 77, "CodeText",ExpressionUUID->"a737e2c7-ff39-4305-8678-2bed86e79077"],
+Cell[CellGroupData[{
+Cell[31899, 722, 2415, 71, 162, "Input",ExpressionUUID->"7f7d1ec5-8af1-4dd5-9296-0000faf80d1c"],
+Cell[34317, 795, 4089, 75, 269, "Output",ExpressionUUID->"6685b54f-aa2e-4bfd-a77a-f19bcfd5fdb5"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38467, 877, 264, 4, 67, "Section",ExpressionUUID->"72f55c20-1571-49fc-8dba-f9fe2f742d7a"],
+Cell[CellGroupData[{
+Cell[38756, 885, 262, 4, 44, "Subsubsection",ExpressionUUID->"6ee4d722-820c-4054-b25c-30e095de8753"],
+Cell[39021, 891, 574, 10, 97, "CodeText",ExpressionUUID->"ad52fad4-c533-43a8-9ebe-be373d34f9fb"],
+Cell[CellGroupData[{
+Cell[39620, 905, 3242, 84, 314, "Input",ExpressionUUID->"8cb45f49-03f2-4c04-932e-6dd76876a804"],
+Cell[42865, 991, 3356, 71, 179, "Output",ExpressionUUID->"7a8e676d-639c-4a71-acac-c0cc74a7fc9c"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46270, 1068, 270, 6, 53, "Subsection",ExpressionUUID->"b2513485-4e1a-4e1c-bc9a-3e4cc8ebd97f"],
+Cell[46543, 1076, 699, 15, 97, "CodeText",ExpressionUUID->"82766571-ffda-4be9-9be1-332ecfd2d179"]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 }
 ]
